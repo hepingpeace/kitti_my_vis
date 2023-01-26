@@ -1,7 +1,8 @@
 # kitti_my_vis
 
 # install
-https://github.com/kuixu/kitti_object_vis
+please follow kittit_object_vis install API what you need  
+  https://github.com/kuixu/kitti_object_vis
 
 ## Open3D
 ![Image text](https://github.com/hepingpeace/kitti_my_vis/blob/main/img_folder/Screenshot%20from%202023-01-26%2016-35-47.png)
