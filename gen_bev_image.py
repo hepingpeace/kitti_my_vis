@@ -53,7 +53,8 @@ def gen_bev_map(pc, lr_range=[-10, 10], bf_range=[-20, 20], res=0.05):
     return im, cropped_cloud
 
 im, cropped_cloud = gen_bev_map(points)
-cv2.imshow('rr', im)
+cv2.imshow('gen_bec_image', im)
+cv2.imwrite("gen_bec_image.jpg",im)
 cv2.waitKey(0)
 
 
