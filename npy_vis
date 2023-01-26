@@ -1,0 +1,9 @@
+import numpy as np
+import open3d as o3d
+np.set_printoptions(suppress=True) 
+data = np.load("0034.npy")
+# b = np.array([1 , 1, 1,255, 255, 255]) 
+txt_data = np.savetxt('scene1.txt', data)
+pcd = o3d.io.read_point_cloud('scene1.txt', format='xyzrgb')
+print(pcd)
+o3d.visualization.draw_geometries([pcd], width=1200, height=600)
