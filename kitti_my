@@ -12,10 +12,53 @@ import argparse
 
 import kitti_my_util as utils
 
+
 cbox = np.array([[0, 70.4], [-40, 40], [-3, 1]])
 # print(cbox)
 # print("hello world")
 
+class kitti_object(object):
+    """Load and parse object data into a usable format."""
+    def __init__(self, root_dir, split="training", args=None):
+        """root_dir contains training and testing folders"""
+        self.root_dir = root_dir
+        self.split = split
+        print(root_dir, split)
+        self.split_dir = os.path.join(root_dir, split)
+
+        if split == "training":
+            self.num_samples = 7481
+        elif split == "testing":
+            self.num_samples = 7518
+        else:
+            print("Unknown split: %s" % (split))
+            exit(-1)
+
+        lidar_dir = "velodyne"
+        depth_dir = "depth"
+        pred_dir = "pred"
+        if args is not None:
+            lidar_dir = args.lidar
+            depth_dir = args.depthdir
+            pred_dir = args.preddir
+
+        self.image_dir = os.path.join(self.split_dir, "image_2")
+        self.label_dir = os.path.join(self.split_dir, "label_2")
+        self.calib_dir = os.path.join(self.split_dir, "calib")
+
+        self.depthpc_dir = os.path.join(self.split_dir, "depth_pc")
+        self.lidar_dir = os.path.join(self.split_dir, lidar_dir)
+        self.depth_dir = os.path.join(self.split_dir, depth_dir)
+        self.pred_dir = os.path.join(self.split_dir, pred_dir)
+
+    def __len__(self):
+        return self.num_samples
+    
+    def get_image(self, idx):
+        assert idx < self.num_samples
+        # self.image_dir == idx idx format is 6-digit (ex: 000005.png)
+        img_filename = os.path.join(self.image_dir, "%06d.png" % (idx))
+        return utils.load_image(img_filename)
 
 if __name__ == "__main__":
     import mayavi.mlab as mlab
