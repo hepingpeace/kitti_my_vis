@@ -20,3 +20,6 @@ TOP_Z_DIVISION = 0.3
 cbox = np.array([[0, 70.4], [-40, 40], [-3, 2]])
 
 print("hello world")
+
+def load_image(img_filename):
+    return cv2.imread(img_filename)
