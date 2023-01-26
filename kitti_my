@@ -1,0 +1,118 @@
+from __future__ import print_function
+
+import os
+import sys
+import numpy as np
+import cv2
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(BASE_DIR)
+sys.path.append(os.path.join(ROOT_DIR, "mayavi"))
+import argparse
+
+import kitti_my_util as utils
+
+cbox = np.array([[0, 70.4], [-40, 40], [-3, 1]])
+# print(cbox)
+# print("hello world")
+
+
+if __name__ == "__main__":
+    import mayavi.mlab as mlab
+    from viz_util import draw_lidar_simple, draw_lidar, draw_gt_boxes3d
+
+    parser = argparse.ArgumentParser(description="KIITI Object Visualization")
+    parser.add_argument(
+        "-d",
+        "--dir",
+        type=str,
+        default="data/object",
+        metavar="N",
+        help="input  (default: data/object)",
+    )
+    parser.add_argument(
+        "-i",
+        "--ind",
+        type=int,
+        default=0,
+        metavar="N",
+        help="input  (default: data/object)",
+    )
+    parser.add_argument(
+        "-p", "--pred", action="store_true", help="show predict results"
+    )
+    parser.add_argument(
+        "-s",
+        "--stat",
+        action="store_true",
+        help=" stat the w/h/l of point cloud in gt bbox",
+    )
+    parser.add_argument(
+        "--split",
+        type=str,
+        default="training",
+        help="use training split or testing split (default: training)",
+    )
+    parser.add_argument(
+        "-l",
+        "--lidar",
+        type=str,
+        default="velodyne",
+        metavar="N",
+        help="velodyne dir  (default: velodyne)",
+    )
+    parser.add_argument(
+        "-e",
+        "--depthdir",
+        type=str,
+        default="depth",
+        metavar="N",
+        help="depth dir  (default: depth)",
+    )
+    parser.add_argument(
+        "-r",
+        "--preddir",
+        type=str,
+        default="pred",
+        metavar="N",
+        help="predicted boxes  (default: pred)",
+    )
+    parser.add_argument("--gen_depth", action="store_true", help="generate depth")
+    parser.add_argument("--vis", action="store_true", help="show images")
+    parser.add_argument("--depth", action="store_true", help="load depth")
+    parser.add_argument("--img_fov", action="store_true", help="front view mapping")
+    parser.add_argument("--const_box", action="store_true", help="constraint box")
+    parser.add_argument(
+        "--save_depth", action="store_true", help="save depth into file"
+    )
+    parser.add_argument(
+        "--pc_label", action="store_true", help="5-verctor lidar, pc with label"
+    )
+    parser.add_argument(
+        "--dtype64", action="store_true", help="for float64 datatype, default float64"
+    )
+
+    parser.add_argument(
+        "--show_lidar_on_image", action="store_true", help="project lidar on image"
+    )
+    parser.add_argument(
+        "--show_lidar_with_depth",
+        action="store_true",
+        help="--show_lidar, depth is supported",
+    )
+    parser.add_argument(
+        "--show_image_with_boxes", action="store_true", help="show lidar"
+    )
+    parser.add_argument(
+        "--show_lidar_topview_with_boxes",
+        action="store_true",
+        help="show lidar topview",
+    )
+    args = parser.parse_args()
+    if args.pred:
+        assert os.path.exists(args.dir + "/" + args.split + "/pred")
+
+    if args.vis:
+        dataset_viz(args.dir, args)
+    if args.gen_depth:
+        depth_to_lidar_format(args.dir, args)
